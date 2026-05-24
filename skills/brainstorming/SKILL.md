@@ -7,7 +7,9 @@ description: "You MUST use this before any creative work - creating features, bu
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
-Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+Start by understanding the current project context, then ask questions to refine the idea. Batch independent questions together using the `AskUserQuestion` tool; only ask sequentially when each answer shapes the next question. Once you understand what you're building, present the design and get user approval.
+
+**Tooling:** `AskUserQuestion` is a deferred tool. Before first use, load its schema via `ToolSearch` with `query: "select:AskUserQuestion"`.
 
 <HARD-GATE>
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
@@ -72,9 +74,9 @@ digraph brainstorming {
 - Check out the current project state first (files, docs, recent commits)
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
-- For appropriately-scoped projects, ask questions one at a time to refine the idea
-- Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message - if a topic needs more exploration, break it into multiple questions
+- For appropriately-scoped projects, refine the idea by asking questions
+- Use the `AskUserQuestion` tool to ask. Batch independent questions in a single call; ask sequentially only when an answer must inform the next question
+- Prefer multiple choice (it maps directly to `AskUserQuestion` options), but open-ended free-form questions are fine too
 - Focus on understanding: purpose, constraints, success criteria
 
 **Exploring approaches:**
@@ -137,8 +139,8 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 ## Key Principles
 
-- **One question at a time** - Don't overwhelm with multiple questions
-- **Multiple choice preferred** - Easier to answer than open-ended when possible
+- **Batch independent questions** - Use `AskUserQuestion` to ask orthogonal questions together; only go sequential when answers depend on each other
+- **Multiple choice preferred** - Maps to `AskUserQuestion` options; easier to answer than open-ended
 - **YAGNI ruthlessly** - Remove unnecessary features from all designs
 - **Explore alternatives** - Always propose 2-3 approaches before settling
 - **Incremental validation** - Present design, get approval before moving on
@@ -148,10 +150,12 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool — not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
 
-**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
-> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. This feature is still new and can be token-intensive. Want to try it? (Requires opening a local URL)"
+**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent using the `AskUserQuestion` tool:
 
-**This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. The message should contain ONLY the offer above and nothing else. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
+- **Question:** "Some of what we're working on might be easier to explain if I can show it to you in a web browser (mockups, diagrams, comparisons). This feature is still new and can be token-intensive. Want to try it? (Requires opening a local URL)"
+- **Options:** `Yes` / `No`
+
+**This call MUST stand alone.** Do not bundle it with clarifying questions in the same `AskUserQuestion` invocation, and do not include other content alongside it. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
 
 **Per-question decision:** Even after the user accepts, decide FOR EACH QUESTION whether to use the browser or the terminal. The test: **would the user understand this better by seeing it than reading it?**
 

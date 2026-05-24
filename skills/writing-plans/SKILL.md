@@ -133,15 +133,14 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan, offer execution choice using the `AskUserQuestion` tool. (`AskUserQuestion` is deferred — load it first via `ToolSearch` with `query: "select:AskUserQuestion"`.)
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+State the path in a short preamble (`Plan complete and saved to docs/superpowers/plans/<filename>.md.`), then call `AskUserQuestion` with one question:
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
-
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
-
-**Which approach?"**
+- **Question:** "How should this plan be executed?"
+- **Options:**
+  - `Subagent-Driven` — Fresh subagent per task, review between tasks, fast iteration (recommended)
+  - `Inline` — Execute in this session using executing-plans, batch execution with checkpoints
 
 **If Subagent-Driven chosen:**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development

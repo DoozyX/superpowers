@@ -44,22 +44,18 @@ Stop. Don't proceed to Step 2.
 git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 ```
 
-Or ask: "This branch split from main - is that correct?"
+If unclear, confirm via `AskUserQuestion` (one yes/no question: "Did this branch split from main?").
 
 ### Step 3: Present Options
 
-Present exactly these 4 options:
+Use the `AskUserQuestion` tool with exactly these 4 options. (`AskUserQuestion` is deferred — load it first via `ToolSearch` with `query: "select:AskUserQuestion"`.)
 
-```
-Implementation complete. What would you like to do?
-
-1. Merge back to <base-branch> locally
-2. Push and create a Pull Request
-3. Keep the branch as-is (I'll handle it later)
-4. Discard this work
-
-Which option?
-```
+- **Question:** "Implementation complete. What would you like to do?"
+- **Options:**
+  - `Merge locally` — Merge back to <base-branch> locally
+  - `Create PR` — Push and create a Pull Request
+  - `Keep as-is` — Leave the branch untouched
+  - `Discard` — Throw away this work
 
 **Don't add explanation** - keep options concise.
 
@@ -113,7 +109,8 @@ Report: "Keeping branch <name>. Worktree preserved at <path>."
 
 #### Option 4: Discard
 
-**Confirm first:**
+**Confirm first** — show what will be deleted, then require typed confirmation. Do NOT use `AskUserQuestion` here; this destructive step requires the user to type the literal word `discard` to prevent accidental option-clicks.
+
 ```
 This will permanently delete:
 - Branch <name>
